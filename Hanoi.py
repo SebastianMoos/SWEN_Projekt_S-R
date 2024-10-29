@@ -8,4 +8,4 @@ def hanoi(n, source, target, auxiliary):
 
 # Beispielaufruf: Verschiebe 3 Scheiben von Stab A nach Stab C mit Hilfe von Stab B
 hanoi(3, 'A', 'C', 'B')
-hanoi(3, 'A', 'C', 'B')
+# hanoi(3, 'A', 'C', 'B') Das ist ein Kommentar
