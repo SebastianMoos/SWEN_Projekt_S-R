@@ -202,12 +202,12 @@ def play() :
 	if pygame.time.get_ticks() > (time1+11) :
 		# Code to control movement of ball.
 		if ball_direction=='UP_LEFT' :
-			if (ball_centre_x-ball_speed)>ball_radius and (ball_centre_y-ball_speed)>ball_radius :
+			if (ball_centre_x-ball_speed)>ball_radius and (ball_centre_y-ball_speed)>ball_radius :	#Hier wird sichersgestellt, dass der Ball im Spielfeld bleibt. Wenn Der Ball an die Spielfeldgrenze kommt, wird er...
 				ball_centre_x-=ball_speed
 				ball_centre_y-=ball_speed
-			elif (ball_centre_y-ball_speed)>ball_radius :      # Ball exceeds left side of screen.
+			elif (ball_centre_y-ball_speed)>ball_radius :      # Der Ball hat die Linke Spielfeldgrenze erreicht und die Richtung des Balls wird nach Rechts verändert
 				ball_direction='UP_RIGHT'
-			elif (ball_centre_x-ball_speed)>ball_radius :      # Ball exceeds top of screen.
+			elif (ball_centre_x-ball_speed)>ball_radius :      # B# Der Ball hat die obere Spielfeldgrenze erreicht und die Richtung des Balls wird nach unten verändert
 				ball_direction='DOWN_LEFT'
 			else :                                             # Ball exceeds both left and top of screen.
 				ball_direction='DOWN_RIGHT'
