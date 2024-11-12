@@ -61,25 +61,25 @@ def reset_game() :    #Funktion, welche die Variablen zurücksetzt (bei Reset)
 # Function to Draw Initial Screen.
 
 def draw_initial_screen() :
-	play()
+	play()	# Play ist die eigentliche Game Funktion und wird weiter unten beschrieben 
 	draw_screen()
 	font=pygame.font.Font(None,150)
 	gameText = font.render("Raphael & Sebi's", True, white)
 	overText = font.render('Pong', True, white)
 	over1Text = font.render('Game', True, white)
-	gameRect = gameText.get_rect()
+	gameRect = gameText.get_rect()	#Rect erzeugt Rechteck um den Text, um die Positionierung auf dem Screen zu vereinfachen
 	overRect = overText.get_rect()
 	over1Rect = over1Text.get_rect()
-	gameRect.centerx=(size[0]/2)
-	gameRect.centery=(size[1]/2)-150
+	gameRect.centerx=(size[0]/2)	#Definiert die Position des Game Textes auf der x-Achse
+	gameRect.centery=(size[1]/2)-150	#Definiert die Position des Game Textes auf der y-Achse
 	overRect.centerx=(size[0]/2)
 	overRect.centery=(size[1]/2)
 	over1Rect.centerx=(size[0]/2)
 	over1Rect.centery=(size[1]/2+150)
-	screen.blit(gameText, gameRect)
+	screen.blit(gameText, gameRect)		#Zeichnet das Objekt game
 	screen.blit(overText, overRect)
 	screen.blit(over1Text, over1Rect)
-	print_press_any_key()
+	print_press_any_key()	#neue Funkion, welche weiter unten beschrieben wird
 	pygame.display.update()
 
 
@@ -87,12 +87,12 @@ def draw_initial_screen() :
 # Function to wait for any key press.
 
 def wait_for_any_key() :
-	while True :
+	while True :	#Schleife wird solange wiederholt,bis eine Taste gedrückt wird
 		for event in pygame.event.get() :
-			if event.type==pygame.QUIT :
+			if event.type==pygame.QUIT :	#Wenn benutzer Fenster schliesst (Quit), wird das Programm und die Pygame Bibliothek beendet
 				sys.exit()
 				pygame.quit()
-			if event.type == pygame.KEYDOWN :
+			if event.type == pygame.KEYDOWN :	#Wenn Benutzer eine Taste drückt (KEYDOWN), ändert sich der Satus auf wait_for_any_key=TRUE. 
 				return True
 
 
