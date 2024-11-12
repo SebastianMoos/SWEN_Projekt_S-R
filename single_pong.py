@@ -3,7 +3,7 @@ import sys
 import random
 
 
-# Initial Conditions.
+# Initial Conditions: Definition Farben, Spielfeldbedingungen, hit_bar, ball
 
 white=(255,255,255)
 black=(0,0,0)
@@ -12,17 +12,17 @@ red=(255,0,0)
 blue=(0,0,255)
 gray=(128,128,128)
 size=[1000,600]
-ball_centre_y=150
-ball_centre_x=(int((random.random()*100000)%(size[0]-200)))+100
+ball_centre_y=150   #Startposition Ball festgelegt auf 150 Pixel von Oben 
+ball_centre_x=(int((random.random()*100000)%(size[0]-200)))+100     #Startposition Ball wird zufällig festgelegt mit Modulo
 ball_radius=25
-ball_direction='UP_LEFT'
-ball_speed=10          # Ball speed.
+ball_direction='UP_LEFT'    #Startrichtung des Balls
+ball_speed=5         # Ball speed.
 hit_bar_speed=18       # Hit Bar Speed.
-hit_bar_length=100
+hit_bar_length=200
 hit_bar_height=25
-hit_bar_left=int(size[0]/2)-int(hit_bar_length/2)
-time1=pygame.time.get_ticks()
-can_accel_left=False
+hit_bar_left=int(size[0]/2)-int(hit_bar_length/2)   #Startposition des Balkens (in der Hälfte des Spielfelds, Balken mittig)
+time1=pygame.time.get_ticks()   #Startzeit des Spiels wird mit get.ticks() gespeichert
+can_accel_left=False    #Balken kann nach links oder rechts bewegt werden (False Wert ist der Standardzustand, sobald der Balken im Spiel bewegt wird, ändern sich die Variablen auf True)
 can_accel_right=False
 game_over=False
 paused_game=False
@@ -31,12 +31,10 @@ score=0
 
 
 
-
-
 # Function to reset the game.
 
-def reset_game() :
-	global ball_centre_y
+def reset_game() :    #Funktion, welche die Variablen zurücksetzt (bei Reset)
+	global ball_centre_y     #Global ermöglicht Zugriff auch auf Variabeln, welche ausserhalb der Funktion definiert wurden.
 	global ball_centre_x
 	global ball_direction
 	global hit_bar_left
@@ -46,7 +44,7 @@ def reset_game() :
 	global game_over
 	global paused_game
 	global score
-	ball_centre_y=150
+	ball_centre_y=150       #Die Standardwerte werden wieder hergestellt
 	ball_centre_x=(int((random.random()*100000)%(size[0]-200)))+100
 	ball_direction='UP_LEFT'
 	hit_bar_left=int(size[0]/2)-int(hit_bar_length/2)
@@ -65,8 +63,8 @@ def reset_game() :
 def draw_initial_screen() :
 	play()
 	draw_screen()
-	font=pygame.font.Font(None,220)
-	gameText = font.render("Nithin's", True, white)
+	font=pygame.font.Font(None,150)
+	gameText = font.render("Raphael & Sebi's", True, white)
 	overText = font.render('Pong', True, white)
 	over1Text = font.render('Game', True, white)
 	gameRect = gameText.get_rect()
@@ -83,10 +81,6 @@ def draw_initial_screen() :
 	screen.blit(over1Text, over1Rect)
 	print_press_any_key()
 	pygame.display.update()
-
-
-
-
 
 
 
@@ -301,7 +295,7 @@ def play() :
 
 pygame.init()
 screen=pygame.display.set_mode(size,0,32)
-pygame.display.set_caption("Nithin's Pong Game")
+pygame.display.set_caption("Raphael & Sebi's Pong Game")
 draw_initial_screen()
 while True :
 	if wait_for_any_key() :
