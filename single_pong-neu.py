@@ -29,7 +29,7 @@ hole_start_x = hit_bar_left + (hit_bar_length // 2) - (hole_width // 2)
 hole_end_x = hole_start_x + hole_width
 
 # Spielsteuerungsvariablen
-time1 = pygame.time.get_ticks()
+time1 = pygame.time.get_ticks() #in Variable time1 wird Zeit gespreichert, welche seit Spielstart verstrichen ist
 can_accel_left = False
 can_accel_right = False
 game_over = False
@@ -78,7 +78,7 @@ def draw_screen():
 def play():
     global hit_bar_left, time1, ball_direction, ball_centre_x, ball_centre_y, score, game_over
 
-    if pygame.time.get_ticks() > (time1 + 11):
+    if pygame.time.get_ticks() > (time1 + 11): # Die Bedingung sorgt dafür, dass die Ballbewegung nur alle 11 Millisekunden überprüft wird, um die Bewegung zeitlich zu regulieren.
         # Bewegung und Kollision des Balls
         if ball_direction == 'UP_LEFT':
             if (ball_centre_x - ball_speed) > ball_radius and (ball_centre_y - ball_speed) > ball_radius:
