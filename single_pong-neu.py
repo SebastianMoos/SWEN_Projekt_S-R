@@ -19,7 +19,7 @@ ball_speed = 5
 
 # Schläger-Einstellungen
 hit_bar_speed = 18
-hit_bar_length = 300
+hit_bar_length = 400
 hit_bar_height = 25
 hit_bar_left = int(size[0] / 2) - int(hit_bar_length / 2) #Size 0 ist die Breite des Speilfelds. Hier wird also die Startposition des Schlägers (mitig im Spielfeld) definiert  
 
@@ -195,3 +195,4 @@ while True:
 
     if game_over:
         reset_game()
+#Ende
