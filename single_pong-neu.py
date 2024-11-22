@@ -21,14 +21,14 @@ ball_speed = 5
 hit_bar_speed = 18
 hit_bar_length = 300
 hit_bar_height = 25
-hit_bar_left = int(size[0] / 2) - int(hit_bar_length / 2)
+hit_bar_left = int(size[0] / 2) - int(hit_bar_length / 2) #Size 0 ist die Breite des Speilfelds. Hier wird also die Startposition des Schlägers (mitig im Spielfeld) definiert  
 
 # Loch im Schläger
 hole_width = 3 * ball_radius  # Loch ist dreimal so breit wie der Ballradius
-hole_start_x = hit_bar_left + (hit_bar_length // 2) - (hole_width // 2)
-hole_end_x = hole_start_x + hole_width
+hole_start_x = hit_bar_left + (hit_bar_length // 2) - (hole_width // 2) #Die Like Position des Lochs wird definiert 
+hole_end_x = hole_start_x + hole_width #Die rechte Position des Lochs wird definiert (Linke Position plus Lochbreite)
 
-# Spielsteuerungsvariablen
+# Spielsteuerungsvariablen (Default Werte, welche bei Eingabe mittels Tastatur oder bei Ereignissen geänder werden)
 time1 = pygame.time.get_ticks() #in Variable time1 wird Zeit gespreichert, welche seit Spielstart verstrichen ist
 can_accel_left = False
 can_accel_right = False
@@ -36,11 +36,11 @@ game_over = False
 paused_game = False
 score = 0
 
-# Spiel zurücksetzen
+# Spiel zurücksetzen (Setzt Werte von Variabeln auf Standar "Anfang" zurück)
 def reset_game():
     global ball_centre_y, ball_centre_x, ball_direction, hit_bar_left, time1, can_accel_left, can_accel_right, game_over, paused_game, score
     ball_centre_y = 150
-    ball_centre_x = (int((random.random() * 100000) % (size[0] - 200))) + 100
+    ball_centre_x = (int((random.random() * 100000) % (size[0] - 200))) + 100 
     ball_direction = 'UP_LEFT'
     hit_bar_left = int(size[0] / 2) - int(hit_bar_length / 2)
     time1 = pygame.time.get_ticks()
