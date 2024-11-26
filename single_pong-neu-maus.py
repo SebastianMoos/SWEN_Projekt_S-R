@@ -75,7 +75,7 @@ def play():
     global hit_bar_left, time1, ball_direction, ball_centre_x, ball_centre_y, score, game_over
     # Mausbewegungen verfolgen und Schlägerposition anpassen, damit der Schläger nicht aus dem Bildschirm läuft
     mouse_x = pygame.mouse.get_pos()[0]
-    hit_bar_left = mouse_x - hit_bar_length / 2
+    hit_bar_left = mouse_x - hit_bar_length / 4
 
     if pygame.time.get_ticks() > (time1 + 11):
         # Bewegung und Kollision des Balls
