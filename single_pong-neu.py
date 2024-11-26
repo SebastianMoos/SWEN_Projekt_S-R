@@ -116,43 +116,43 @@ def play():
             ball_mitte_y -= ball_geschwindigkeit
 
         # Wandkollisionen
-        if ball_mitte_x - ball_radius <= 0:
-            ball_richtung = 'DOWN_RIGHT' if 'DOWN' in ball_richtung else 'UP_RIGHT'
-        if ball_mitte_x + ball_radius >= groesse[0]:
+        if ball_mitte_x - ball_radius <= 0:  #Wand links: Wenn die linke Kante des Balls (Mittelpunkt minus Radius) die Wand trifft (x<=0)
+            ball_richtung = 'DOWN_RIGHT' if 'DOWN' in ball_richtung else 'UP_RIGHT' 
+        if ball_mitte_x + ball_radius >= groesse[0]: #Wand Rechts: Wenn die rechte Kante des Balls (Mittelpunkt plus Radius) die Wand trifft (x>=0)
             ball_richtung = 'DOWN_LEFT' if 'DOWN' in ball_richtung else 'UP_LEFT'
-        if ball_mitte_y - ball_radius <= 0:
+        if ball_mitte_y - ball_radius <= 0:  #Obere Wand: Wenn die obere Kante des Balls (Mittelpunkt minus Radius) die Wand trifft (y<=0)
             ball_richtung = 'DOWN_LEFT' if ball_richtung == 'UP_LEFT' else 'DOWN_RIGHT'
 
         # Schlägerkollisionen
-        if ball_mitte_y + ball_radius >= groesse[1] - schlaeger_hoehe:
-            if schlaeger_rand_links <= ball_mitte_x <= schlaeger_rand_links + schlaeger_laenge:
+        if ball_mitte_y + ball_radius >= groesse[1] - schlaeger_hoehe: #Wenn die untere Kante des Balls den Schläger berührt (groesse(1) = Höhe des Spielfelds) 
+            if schlaeger_rand_links <= ball_mitte_x <= schlaeger_rand_links + schlaeger_laenge: #Wenn der Ball auf dem Schläger ist (Ballmitte zwischen Schlägerrand links und Schlägerand rechts)
                 # Treffer auf den Balken
-                if loch_rand_links <= ball_mitte_x <= loch_rand_rechts:
+                if loch_rand_links <= ball_mitte_x <= loch_rand_rechts: #Wenn der Ball zwischen die Lochränder (ins Loch) fällt, dann wird ein Punkt dazugezählt
                     # Treffer in der Lücke
                     score += 1
 
                     # Lücke verkleinern in 5er-Schritten
-                    if score % 5 == 0 and loch_breite > min_loch_breite:
-                        loch_breite -= ball_radius  # rotuziert die Breite um einen Ballradius pro Schritt
+                    if score % 5 == 0 and loch_breite > min_loch_breite:  #hier wird geprüft ob der aktuelle Score durch 5 teilbar ist. Sofern dies der Fall ist und die Loch Breite grösser als die min_lochbreite ist...
+                        loch_breite -= ball_radius  # reduziert die Breite um einen Ballradius pro Schritt
                     # Balken verkleinern, wenn Lücke minimal ist
-                    if loch_breite == min_loch_breite and score % 5 == 0 and schlaeger_laenge > min_schlaeger_laenge:
-                        schlaeger_laenge -= ball_radius * 2  # rotuziert Balkenbreite um zwei Ballradien
+                    if loch_breite == min_loch_breite and score % 5 == 0 and schlaeger_laenge > min_schlaeger_laenge:  #Wenn die minimale Lochgrösse erreicht wird und die Punktzahl durch 5 teilbar ist, wird der Code auf der nächsten Zeile ausgeführt. 
+                        schlaeger_laenge -= ball_radius * 2  # reduziert Balkenbreite um zwei Ballradien (-= ist eine Kurzschreibweise in Python für: schläger_länge= schläger_länge - ball radius)
 
-                    ball_mitte_y = 150  # Reset Ballhöhe
+                    ball_mitte_y = 150  # Reset Ballhöhe (Wenn der Ball ins Loch fällt, wird der Ball neu positioniert --> Start Werte)
                     ball_mitte_x = (int((random.random() * 100000) % (groesse[0] - 200))) + 100
                     ball_richtung = random.choice(['DOWN_LEFT', 'DOWN_RIGHT'])
                 else:
-                    # Ball prallt ab
-                    ball_richtung = 'UP_LEFT' if ball_richtung == 'DOWN_LEFT' else 'UP_RIGHT'
+                    # Ball prallt ab (Wenn der Ball den Schläger außerhalb der Lücke trifft, ändert sich seine Richtung, und er wird nach oben abgelenkt.)
+                    ball_richtung = 'UP_LEFT' if ball_richtung == 'DOWN_LEFT' else 'UP_RIGHT'  #Ballrichtung nach Schläger berührung: Wenn Ball von rechts kommt, "fliegt" er nach Links weiter und umgekehrt.
             else:
                 # Ball fällt außerhalb des Schlägers -> Game Over
                 game_over = True
-        elif ball_mitte_y + ball_radius >= groesse[1]:
+        elif ball_mitte_y + ball_radius >= groesse[1]: #Wenn der Ball den unteren Spielfeldrand berührt 
             # Ball fällt unter den Balken -> Game Over
             game_over = True
 
         # Schläger bewegen
-        if can_accel_left and schlaeger_rand_links > 0:
+        if can_accel_left and schlaeger_rand_links > 0:  #can_accel_left prüft ob Schläger nach links bewegt werden darf (also ob die Pfeiltaste liks gedrückt ist)
             schlaeger_rand_links -= schlaeger_geschwindigkeit
         if can_accel_right and schlaeger_rand_links + schlaeger_laenge < groesse[0]:
             schlaeger_rand_links += schlaeger_geschwindigkeit
@@ -166,12 +166,12 @@ pygame.display.set_caption("Pong mit Korb")
 reset_game()
 
 # Hauptspiel-Schleife
-while True:
+while True: # Schleife läuft bis das Spiel beendet wird (z.B. durch sys.exit)
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT: #Wenn das Fenster geschlossen wird (pygame.QUIT), wird das Programm mit sys.exit() beendet.
             sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if game_over and event.key == pygame.K_RETURN:
+        if event.type == pygame.KEYDOWN: # zeigt alle Events auf, welche durch Tastendruck erfolgen (solange die Taste gedrückt)
+            if game_over and event.key == pygame.K_RETURN: #Wenn das Spiel beendet ist (game_over == True) und die Enter-Taste (K_RETURN) gedrückt wird, wird das Spiel zurückgesetzt, indem reset_game() aufgerufen wird
                 # Spiel neu starten bei Game Over und Enter-Taste
                 reset_game()
             if event.key == pygame.K_ESCAPE:
@@ -180,7 +180,7 @@ while True:
                 can_accel_left = True
             if event.key == pygame.K_RIGHT:
                 can_accel_right = True
-        if event.type == pygame.KEYUP:
+        if event.type == pygame.KEYUP:  # zeigt alle Events auf, welche durch Loslassen der Taste erfolgen (Werte verändern sich auf False und Aktion wird gestoppt)
             if event.key == pygame.K_LEFT:
                 can_accel_left = False
             if event.key == pygame.K_RIGHT:
