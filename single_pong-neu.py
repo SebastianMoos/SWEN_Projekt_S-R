@@ -36,22 +36,22 @@ zeit1 = pygame.time.get_ticks()
 kann_links_bewegen = False
 kann_rechts_bewegen = False
 game_over = False
-paused_game = False
-score = 0
+spiel_pausieren = False
+punkte_stand = 0
 
 # Spiel zurücksetzen
 def reset_game():
-    global ball_mitte_y, ball_mitte_x, ball_richtung, schlaeger_rand_links, zeit1, kann_links_bewegen, kann_rechts_bewegen, game_over, paused_game, score, loch_breite, schlaeger_laenge
+    global ball_mitte_y, ball_mitte_x, ball_richtung, schlaeger_rand_links, zeit1, kann_links_bewegen, kann_rechts_bewegen, game_over, spiel_pausieren, punkte_stand, loch_breite, schlaeger_laenge
     ball_mitte_y = 150 # Startmittelpunkt y für Ball
     ball_mitte_x =  groesse[0]/2 # Start in X ist die Hälfte von Bildschirm --> (int((random.random() * 100000) % (groesse[0] - 200))) + 100
-    ball_richtung = 'DOWN_LEFT'
-    schlaeger_rand_links = int(groesse[0] / 2) - int(schlaeger_laenge / 2)
+    ball_richtung = 'DOWN_LEFT' #Bei Start wird der Ball nach unten links gestartet
+    schlaeger_rand_links = int(groesse[0] / 2) - int(schlaeger_laenge / 2) #Schlägerrand links definiert
     zeit1 = pygame.time.get_ticks()
     kann_links_bewegen = False
     kann_rechts_bewegen = False
     game_over = False
-    paused_game = False
-    score = 0
+    spiel_pausieren = False
+    punkte_stand = 0
     loch_breite = 6 * ball_radius  # Lücke zurücksetzen
     schlaeger_laenge = 400  # Balkenbreite zurücksetzen
 
@@ -73,11 +73,11 @@ def draw_screen():
         screen.blit(restart_text, restart_rect)
     else:
         # Punkteanzeige
-        scoreText = font.render(str(score), True, weiss)
-        scoreRect = scoreText.get_rect()
-        scoreRect.centerx = groesse[0] - 100
-        scoreRect.centery = 100
-        screen.blit(scoreText, scoreRect)
+        punkte_standText = font.render(str(punkte_stand), True, weiss)
+        punkte_standRect = punkte_standText.get_rect()
+        punkte_standRect.centerx = groesse[0] - 100
+        punkte_standRect.centery = 100
+        screen.blit(punkte_standText, punkte_standRect)
 
         # Ball zeichnen
         pygame.draw.circle(screen, rot, (ball_mitte_x, ball_mitte_y), ball_radius)
@@ -98,7 +98,7 @@ def draw_screen():
 
 # Hauptspiellogik
 def play():
-    global schlaeger_rand_links, zeit1, ball_richtung, ball_mitte_x, ball_mitte_y, score, game_over, loch_breite, schlaeger_laenge
+    global schlaeger_rand_links, zeit1, ball_richtung, ball_mitte_x, ball_mitte_y, punkte_stand, game_over, loch_breite, schlaeger_laenge
 
     if pygame.time.get_ticks() > (zeit1 + 11): 
         # Bewegung des Balls
@@ -129,13 +129,13 @@ def play():
                 # Treffer auf den Balken
                 if loch_rand_links <= ball_mitte_x <= loch_rand_rechts: #Wenn der Ball zwischen die Lochränder (ins Loch) fällt, dann wird ein Punkt dazugezählt
                     # Treffer in der Lücke
-                    score += 1
+                    punkte_stand += 1
 
                     # Lücke verkleinern in 5er-Schritten
-                    if score % 5 == 0 and loch_breite > min_loch_breite:  #hier wird geprüft ob der aktuelle Score durch 5 teilbar ist. Sofern dies der Fall ist und die Loch Breite grösser als die min_lochbreite ist...
+                    if punkte_stand % 5 == 0 and loch_breite > min_loch_breite:  #hier wird geprüft ob der aktuelle punkte_stand durch 5 teilbar ist. Sofern dies der Fall ist und die Loch Breite grösser als die min_lochbreite ist...
                         loch_breite -= ball_radius  # reduziert die Breite um einen Ballradius pro Schritt
                     # Balken verkleinern, wenn Lücke minimal ist
-                    if loch_breite == min_loch_breite and score % 5 == 0 and schlaeger_laenge > min_schlaeger_laenge:  #Wenn die minimale Lochgrösse erreicht wird und die Punktzahl durch 5 teilbar ist, wird der Code auf der nächsten Zeile ausgeführt. 
+                    if loch_breite == min_loch_breite and punkte_stand % 5 == 0 and schlaeger_laenge > min_schlaeger_laenge:  #Wenn die minimale Lochgrösse erreicht wird und die Punktzahl durch 5 teilbar ist, wird der Code auf der nächsten Zeile ausgeführt. 
                         schlaeger_laenge -= ball_radius * 2  # reduziert Balkenbreite um zwei Ballradien (-= ist eine Kurzschreibweise in Python für: schläger_länge= schläger_länge - ball radius)
 
                     ball_mitte_y = 150  # Reset Ballhöhe (Wenn der Ball ins Loch fällt, wird der Ball neu positioniert --> Start Werte)
@@ -175,7 +175,7 @@ while True: # Schleife läuft bis das Spiel beendet wird (z.B. durch sys.exit)
                 # Spiel neu starten bei Game Over und Enter-Taste
                 reset_game()
             if event.key == pygame.K_ESCAPE:
-                paused_game = not paused_game
+                spiel_pausieren = not spiel_pausieren
             if event.key == pygame.K_LEFT:
                 kann_links_bewegen = True
             if event.key == pygame.K_RIGHT:
@@ -186,7 +186,7 @@ while True: # Schleife läuft bis das Spiel beendet wird (z.B. durch sys.exit)
             if event.key == pygame.K_RIGHT:
                 kann_rechts_bewegen = False
 
-    if not paused_game and not game_over:
+    if not spiel_pausieren and not game_over:
         play()
         draw_screen()
 
