@@ -61,8 +61,8 @@ def draw_screen():
     screen.fill(black)
     font = pygame.font.Font(None, 100)
 
-    if game_over:
-        # "Game Over"-Nachricht
+    if game_over: 
+        # "Game Over"-Nachricht eingefügt
         game_over_text = font.render("Game Over", True, red)
         game_over_rect = game_over_text.get_rect(center=(size[0] // 2, size[1] // 2 - 50))
         screen.blit(game_over_text, game_over_rect)
