@@ -16,7 +16,7 @@ ball_durchmesser = ball_radius * 2
 ball_mitte_y = 150
 ball_mitte_x = (int((random.random() * 100000) % (groesse[0] - 200))) + 100
 ball_richtung = 'DOWN_LEFT'
-ball_geschwindigkeit = 2
+ball_geschwindigkeit = 5
 
 # Schläger-Einstellungen
 schlaeger_geschwindigkeit = 10
@@ -45,21 +45,23 @@ def reset_game():
     ball_mitte_y = 150 # Startmittelpunkt y für Ball
     ball_mitte_x =  groesse[0]/2 # Start in X ist die Hälfte von Bildschirm --> (int((random.random() * 100000) % (groesse[0] - 200))) + 100
     ball_richtung = 'DOWN_LEFT' #Bei Start wird der Ball nach unten links gestartet
-    schlaeger_rand_links = int(groesse[0] / 2) - int(schlaeger_laenge / 2) #Schlägerrand links definiert
-    zeit1 = pygame.time.get_ticks()
-    kann_links_bewegen = False
-    kann_rechts_bewegen = False
-    game_over = False
-    spiel_pausieren = False
-    punkte_stand = 0
+    schlaeger_rand_links = int(groesse[0] / 2) - int(schlaeger_laenge / 2) # Schläger Position zurücksetzen
+    # `#Schlägerrand links
+    #Schlägerrand links definiert
+    zeit1 = pygame.time.get_ticks() #Zeit vergangen seit start des Spiels
+    kann_links_bewegen = False # alles zurücksetzen
+    kann_rechts_bewegen = False # alles zurücksetzen
+    game_over = False # alles zurücksetzen
+    spiel_pausieren = False # alles zurücksetzen
+    punkte_stand = 0 # alles zurücksetzen
     loch_breite = 6 * ball_radius  # Lücke zurücksetzen
     schlaeger_laenge = 400  # Balkenbreite zurücksetzen
 
 # Spielbildschirm zeichnen
 def draw_screen():
-    global loch_rand_links, loch_rand_rechts
-    screen.fill(schwarz)
-    font = pygame.font.Font(None, 100)
+    global loch_rand_links, loch_rand_rechts # Loch ränder definieren
+    screen.fill(schwarz) # Bildschirm schwarz ausfüllen
+    font = pygame.font.Font(None, 100) # Schrift definieren
 
     if game_over: 
         # "Game Over"-Nachricht eingefügt
@@ -75,7 +77,8 @@ def draw_screen():
         # Punkteanzeige
         punkte_standText = font.render(str(punkte_stand), True, weiss)
         punkte_standRect = punkte_standText.get_rect()
-        punkte_standRect.centerx = groesse[0] - 100
+        # Schriftposition definieren
+        punkte_standRect.centerx = groesse[0] - 100 
         punkte_standRect.centery = 100
         screen.blit(punkte_standText, punkte_standRect)
 
