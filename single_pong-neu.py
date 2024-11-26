@@ -42,8 +42,8 @@ score = 0
 # Spiel zurücksetzen
 def reset_game():
     global ball_mitte_y, ball_mitte_x, ball_richtung, schlaeger_rand_links, time1, can_accel_left, can_accel_right, game_over, paused_game, score, loch_breite, schlaeger_laenge
-    ball_mitte_y = 150
-    ball_mitte_x = (int((random.random() * 100000) % (groesse[0] - 200))) + 100
+    ball_mitte_y = 150 # Startmittelpunkt y für Ball
+    ball_mitte_x =  groesse[0]/2 # Start in X ist die Hälfte von Bildschirm --> (int((random.random() * 100000) % (groesse[0] - 200))) + 100
     ball_richtung = 'DOWN_LEFT'
     schlaeger_rand_links = int(groesse[0] / 2) - int(schlaeger_laenge / 2)
     time1 = pygame.time.get_ticks()
