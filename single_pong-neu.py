@@ -32,23 +32,23 @@ loch_rand_links = schlaeger_rand_links + (schlaeger_laenge // 2) - (loch_breite 
 loch_rand_rechts = loch_rand_links + loch_breite
 
 # Spielsteuerungsvariablen
-time1 = pygame.time.get_ticks()
-can_accel_left = False
-can_accel_right = False
+zeit1 = pygame.time.get_ticks()
+kann_links_bewegen = False
+kann_rechts_bewegen = False
 game_over = False
 paused_game = False
 score = 0
 
 # Spiel zurücksetzen
 def reset_game():
-    global ball_mitte_y, ball_mitte_x, ball_richtung, schlaeger_rand_links, time1, can_accel_left, can_accel_right, game_over, paused_game, score, loch_breite, schlaeger_laenge
+    global ball_mitte_y, ball_mitte_x, ball_richtung, schlaeger_rand_links, zeit1, kann_links_bewegen, kann_rechts_bewegen, game_over, paused_game, score, loch_breite, schlaeger_laenge
     ball_mitte_y = 150 # Startmittelpunkt y für Ball
     ball_mitte_x =  groesse[0]/2 # Start in X ist die Hälfte von Bildschirm --> (int((random.random() * 100000) % (groesse[0] - 200))) + 100
     ball_richtung = 'DOWN_LEFT'
     schlaeger_rand_links = int(groesse[0] / 2) - int(schlaeger_laenge / 2)
-    time1 = pygame.time.get_ticks()
-    can_accel_left = False
-    can_accel_right = False
+    zeit1 = pygame.time.get_ticks()
+    kann_links_bewegen = False
+    kann_rechts_bewegen = False
     game_over = False
     paused_game = False
     score = 0
@@ -98,9 +98,9 @@ def draw_screen():
 
 # Hauptspiellogik
 def play():
-    global schlaeger_rand_links, time1, ball_richtung, ball_mitte_x, ball_mitte_y, score, game_over, loch_breite, schlaeger_laenge
+    global schlaeger_rand_links, zeit1, ball_richtung, ball_mitte_x, ball_mitte_y, score, game_over, loch_breite, schlaeger_laenge
 
-    if pygame.time.get_ticks() > (time1 + 11): 
+    if pygame.time.get_ticks() > (zeit1 + 11): 
         # Bewegung des Balls
         if ball_richtung == 'DOWN_LEFT':
             ball_mitte_x -= ball_geschwindigkeit
@@ -152,12 +152,12 @@ def play():
             game_over = True
 
         # Schläger bewegen
-        if can_accel_left and schlaeger_rand_links > 0:  #can_accel_left prüft ob Schläger nach links bewegt werden darf (also ob die Pfeiltaste liks gedrückt ist)
+        if kann_links_bewegen and schlaeger_rand_links > 0:  #kann_links_bewegen prüft ob Schläger nach links bewegt werden darf (also ob die Pfeiltaste liks gedrückt ist)
             schlaeger_rand_links -= schlaeger_geschwindigkeit
-        if can_accel_right and schlaeger_rand_links + schlaeger_laenge < groesse[0]:
+        if kann_rechts_bewegen and schlaeger_rand_links + schlaeger_laenge < groesse[0]:
             schlaeger_rand_links += schlaeger_geschwindigkeit
 
-        time1 = pygame.time.get_ticks()
+        zeit1 = pygame.time.get_ticks()
 
 # Initialisiere das Spiel
 pygame.init()
@@ -177,14 +177,14 @@ while True: # Schleife läuft bis das Spiel beendet wird (z.B. durch sys.exit)
             if event.key == pygame.K_ESCAPE:
                 paused_game = not paused_game
             if event.key == pygame.K_LEFT:
-                can_accel_left = True
+                kann_links_bewegen = True
             if event.key == pygame.K_RIGHT:
-                can_accel_right = True
+                kann_rechts_bewegen = True
         if event.type == pygame.KEYUP:  # zeigt alle Events auf, welche durch Loslassen der Taste erfolgen (Werte verändern sich auf False und Aktion wird gestoppt)
             if event.key == pygame.K_LEFT:
-                can_accel_left = False
+                kann_links_bewegen = False
             if event.key == pygame.K_RIGHT:
-                can_accel_right = False
+                kann_rechts_bewegen = False
 
     if not paused_game and not game_over:
         play()
