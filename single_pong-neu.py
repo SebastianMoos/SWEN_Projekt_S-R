@@ -12,36 +12,39 @@ size = [1000, 600]
 
 # Ball-Einstellungen
 ball_radius = 25
+ball_diameter = ball_radius * 2
 ball_centre_y = 150
 ball_centre_x = (int((random.random() * 100000) % (size[0] - 200))) + 100
-ball_direction = 'UP_LEFT'
-ball_speed = 5
+ball_direction = 'DOWN_LEFT'
+ball_speed = 2
 
 # Schläger-Einstellungen
 hit_bar_speed = 18
 hit_bar_length = 400
 hit_bar_height = 25
-hit_bar_left = int(size[0] / 2) - int(hit_bar_length / 2) #Size 0 ist die Breite des Speilfelds. Hier wird also die Startposition des Schlägers (mitig im Spielfeld) definiert  
+min_hit_bar_length = 2 * ball_radius  # Minimale Balkenbreite
+hit_bar_left = int(size[0] / 2) - int(hit_bar_length / 2)
 
 # Loch im Schläger
-hole_width = 3 * ball_radius  # Loch ist dreimal so breit wie der Ballradius
-hole_start_x = hit_bar_left + (hit_bar_length // 2) - (hole_width // 2) #Die Like Position des Lochs wird definiert 
-hole_end_x = hole_start_x + hole_width #Die rechte Position des Lochs wird definiert (Linke Position plus Lochbreite)
+hole_width = 6 * ball_radius  # Startgröße: 6-facher Ballradius
+min_hole_width = ball_diameter  # Mindestgröße: gleich dem Durchmesser des Balls
+hole_start_x = hit_bar_left + (hit_bar_length // 2) - (hole_width // 2)
+hole_end_x = hole_start_x + hole_width
 
-# Spielsteuerungsvariablen (Default Werte, welche bei Eingabe mittels Tastatur oder bei Ereignissen geänder werden)
-time1 = pygame.time.get_ticks() #in Variable time1 wird Zeit gespreichert, welche seit Spielstart verstrichen ist
+# Spielsteuerungsvariablen
+time1 = pygame.time.get_ticks()
 can_accel_left = False
 can_accel_right = False
 game_over = False
 paused_game = False
 score = 0
 
-# Spiel zurücksetzen (Setzt Werte von Variabeln auf Standar "Anfang" zurück)
+# Spiel zurücksetzen
 def reset_game():
-    global ball_centre_y, ball_centre_x, ball_direction, hit_bar_left, time1, can_accel_left, can_accel_right, game_over, paused_game, score
+    global ball_centre_y, ball_centre_x, ball_direction, hit_bar_left, time1, can_accel_left, can_accel_right, game_over, paused_game, score, hole_width, hit_bar_length
     ball_centre_y = 150
-    ball_centre_x = (int((random.random() * 100000) % (size[0] - 200))) + 100 
-    ball_direction = 'UP_LEFT'
+    ball_centre_x = (int((random.random() * 100000) % (size[0] - 200))) + 100
+    ball_direction = 'DOWN_LEFT'
     hit_bar_left = int(size[0] / 2) - int(hit_bar_length / 2)
     time1 = pygame.time.get_ticks()
     can_accel_left = False
@@ -49,126 +52,117 @@ def reset_game():
     game_over = False
     paused_game = False
     score = 0
+    hole_width = 6 * ball_radius  # Lücke zurücksetzen
+    hit_bar_length = 400  # Balkenbreite zurücksetzen
 
 # Spielbildschirm zeichnen
 def draw_screen():
     global hole_start_x, hole_end_x
     screen.fill(black)
     font = pygame.font.Font(None, 100)
-    scoreText = font.render(str(score), True, white)
-    scoreRect = scoreText.get_rect()
-    scoreRect.centerx = size[0] - 100
-    scoreRect.centery = 100
-    screen.blit(scoreText, scoreRect)
 
-    # Ball zeichnen
-    pygame.draw.circle(screen, red, (ball_centre_x, ball_centre_y), ball_radius)
+    if game_over:
+        # "Game Over"-Nachricht
+        game_over_text = font.render("Game Over", True, red)
+        game_over_rect = game_over_text.get_rect(center=(size[0] // 2, size[1] // 2 - 50))
+        screen.blit(game_over_text, game_over_rect)
 
-    # Schläger zeichnen
-    pygame.draw.rect(screen, blue, (hit_bar_left, size[1] - hit_bar_height, hit_bar_length, hit_bar_height))
+        # Neustart-Hinweis
+        restart_text = pygame.font.Font(None, 50).render("Press ENTER to restart", True, white)
+        restart_rect = restart_text.get_rect(center=(size[0] // 2, size[1] // 2 + 50))
+        screen.blit(restart_text, restart_rect)
+    else:
+        # Punkteanzeige
+        scoreText = font.render(str(score), True, white)
+        scoreRect = scoreText.get_rect()
+        scoreRect.centerx = size[0] - 100
+        scoreRect.centery = 100
+        screen.blit(scoreText, scoreRect)
 
-    # Loch im Schläger hinzufügen
-    hole_start_x = hit_bar_left + (hit_bar_length // 2) - (hole_width // 2)
-    hole_end_x = hole_start_x + hole_width
-    pygame.draw.rect(screen, black, (hole_start_x, size[1] - hit_bar_height, hole_width, hit_bar_height))
+        # Ball zeichnen
+        pygame.draw.circle(screen, red, (ball_centre_x, ball_centre_y), ball_radius)
+
+        # Schläger zeichnen
+        pygame.draw.rect(screen, blue, (hit_bar_left, size[1] - hit_bar_height, hit_bar_length, hit_bar_height))
+
+        # Loch im Schläger hinzufügen
+        hole_start_x = hit_bar_left + (hit_bar_length // 2) - (hole_width // 2)
+        hole_end_x = hole_start_x + hole_width
+        pygame.draw.rect(screen, black, (hole_start_x, size[1] - hit_bar_height, hole_width, hit_bar_height))
+
+        # Korb-Linie zeichnen (direkt über dem unteren Rand)
+        basket_line_y = size[1] - 5  # Linie knapp über dem Spielfeldrand
+        pygame.draw.line(screen, white, (hole_start_x, basket_line_y), (hole_end_x, basket_line_y), 3)
 
     pygame.display.update()
 
 # Hauptspiellogik
 def play():
-    global hit_bar_left, time1, ball_direction, ball_centre_x, ball_centre_y, score, game_over
+    global hit_bar_left, time1, ball_direction, ball_centre_x, ball_centre_y, score, game_over, hole_width, hit_bar_length
 
-    if pygame.time.get_ticks() > (time1 + 11): # Die Bedingung sorgt dafür, dass die Ballbewegung nur alle 11 Millisekunden überprüft wird, um die Bewegung zeitlich zu regulieren.
-        # Bewegung und Kollision des Balls
-        if ball_direction == 'UP_LEFT':
-            if (ball_centre_x - ball_speed) > ball_radius and (ball_centre_y - ball_speed) > ball_radius:
-                ball_centre_x -= ball_speed
-                ball_centre_y -= ball_speed
-            elif (ball_centre_y - ball_speed) > ball_radius:
-                ball_direction = 'UP_RIGHT'
-            elif (ball_centre_x - ball_speed) > ball_radius:
-                ball_direction = 'DOWN_LEFT'
-            else:
-                ball_direction = 'DOWN_RIGHT'
-
-        elif ball_direction == 'UP_RIGHT':
-            if (ball_centre_x + ball_speed) < (size[0] - ball_radius) and (ball_centre_y - ball_speed) > ball_radius:
-                ball_centre_x += ball_speed
-                ball_centre_y -= ball_speed
-            elif (ball_centre_y - ball_speed) > ball_radius:
-                ball_direction = 'UP_LEFT'
-            elif (ball_centre_x + ball_speed) < (size[0] - ball_radius):
-                ball_direction = 'DOWN_RIGHT'
-            else:
-                ball_direction = 'DOWN_LEFT'
-
-        elif ball_direction == 'DOWN_LEFT':
-            if (ball_centre_x - ball_speed) > ball_radius and (ball_centre_y + ball_speed) < (size[1] - ball_radius):
-                if (ball_centre_x + ball_radius) >= hit_bar_left and (ball_centre_x - ball_radius) <= (hit_bar_left + hit_bar_length):
-                    if hole_start_x <= ball_centre_x <= hole_end_x:
-                        if (ball_centre_y + ball_radius) >= (size[1] - hit_bar_height):
-                            ball_centre_y = size[1] - ball_radius
-                            game_over = True
-                        else:
-                            ball_centre_x -= ball_speed
-                            ball_centre_y += ball_speed
-                    else:
-                        if (ball_centre_y + ball_speed) < (size[1] - (ball_radius + hit_bar_height)):
-                            ball_centre_x -= ball_speed
-                            ball_centre_y += ball_speed
-                        else:
-                            ball_direction = 'UP_LEFT'
-                            score += 1
-                else:
-                    ball_centre_x -= ball_speed
-                    ball_centre_y += ball_speed
-            elif (ball_centre_x - ball_speed) > ball_radius:
-                ball_direction = 'UP_LEFT'
-            elif (ball_centre_y + ball_speed) < (size[1] - ball_radius):
-                ball_direction = 'DOWN_RIGHT'
-            else:
-                direction = 'UP_RIGHT'
-
+    if pygame.time.get_ticks() > (time1 + 11): 
+        # Bewegung des Balls
+        if ball_direction == 'DOWN_LEFT':
+            ball_centre_x -= ball_speed
+            ball_centre_y += ball_speed
         elif ball_direction == 'DOWN_RIGHT':
-            if (ball_centre_x + ball_speed) < (size[0] - ball_radius) and (ball_centre_y + ball_speed) < (size[1] - ball_radius):
-                if (ball_centre_x + ball_radius) >= hit_bar_left and (ball_centre_x - ball_radius) <= (hit_bar_left + hit_bar_length):
-                    if hole_start_x <= ball_centre_x <= hole_end_x:
-                        if (ball_centre_y + ball_radius) >= (size[1] - hit_bar_height):
-                            ball_centre_y = size[1] - ball_radius
-                            game_over = True
-                        else:
-                            ball_centre_x += ball_speed
-                            ball_centre_y += ball_speed
-                    else:
-                        if (ball_centre_y + ball_speed) < (size[1] - (ball_radius + hit_bar_height)):
-                            ball_centre_x += ball_speed
-                            ball_centre_y += ball_speed
-                        else:
-                            ball_direction = 'UP_RIGHT'
-                            score += 1
-                else:
-                    ball_centre_x += ball_speed
-                    ball_centre_y += ball_speed
-            elif (ball_centre_x + ball_speed) < (size[0] - ball_radius):
-                ball_direction = 'UP_RIGHT'
-            elif (ball_centre_y + ball_speed) < (size[1] - ball_radius):
-                ball_direction = 'DOWN_LEFT'
-            else:
-                direction = 'UP_LEFT'
+            ball_centre_x += ball_speed
+            ball_centre_y += ball_speed
+        elif ball_direction == 'UP_LEFT':
+            ball_centre_x -= ball_speed
+            ball_centre_y -= ball_speed
+        elif ball_direction == 'UP_RIGHT':
+            ball_centre_x += ball_speed
+            ball_centre_y -= ball_speed
 
-        if can_accel_left:
-            if (hit_bar_left - hit_bar_speed) >= 0:
-                hit_bar_left -= hit_bar_speed
-        if can_accel_right:
-            if (hit_bar_left + hit_bar_length + hit_bar_speed) <= size[0]:
-                hit_bar_left += hit_bar_speed
+        # Wandkollisionen
+        if ball_centre_x - ball_radius <= 0:
+            ball_direction = 'DOWN_RIGHT' if 'DOWN' in ball_direction else 'UP_RIGHT'
+        if ball_centre_x + ball_radius >= size[0]:
+            ball_direction = 'DOWN_LEFT' if 'DOWN' in ball_direction else 'UP_LEFT'
+        if ball_centre_y - ball_radius <= 0:
+            ball_direction = 'DOWN_LEFT' if ball_direction == 'UP_LEFT' else 'DOWN_RIGHT'
+
+        # Schlägerkollisionen
+        if ball_centre_y + ball_radius >= size[1] - hit_bar_height:
+            if hit_bar_left <= ball_centre_x <= hit_bar_left + hit_bar_length:
+                # Treffer auf den Balken
+                if hole_start_x <= ball_centre_x <= hole_end_x:
+                    # Treffer in der Lücke
+                    score += 1
+
+                    # Lücke verkleinern in 5er-Schritten
+                    if score % 5 == 0 and hole_width > min_hole_width:
+                        hole_width -= ball_radius  # Reduziert die Breite um einen Ballradius pro Schritt
+                    # Balken verkleinern, wenn Lücke minimal ist
+                    if hole_width == min_hole_width and score % 5 == 0 and hit_bar_length > min_hit_bar_length:
+                        hit_bar_length -= ball_radius * 2  # Reduziert Balkenbreite um zwei Ballradien
+
+                    ball_centre_y = 150  # Reset Ballhöhe
+                    ball_centre_x = (int((random.random() * 100000) % (size[0] - 200))) + 100
+                    ball_direction = random.choice(['DOWN_LEFT', 'DOWN_RIGHT'])
+                else:
+                    # Ball prallt ab
+                    ball_direction = 'UP_LEFT' if ball_direction == 'DOWN_LEFT' else 'UP_RIGHT'
+            else:
+                # Ball fällt außerhalb des Schlägers -> Game Over
+                game_over = True
+        elif ball_centre_y + ball_radius >= size[1]:
+            # Ball fällt unter den Balken -> Game Over
+            game_over = True
+
+        # Schläger bewegen
+        if can_accel_left and hit_bar_left > 0:
+            hit_bar_left -= hit_bar_speed
+        if can_accel_right and hit_bar_left + hit_bar_length < size[0]:
+            hit_bar_left += hit_bar_speed
 
         time1 = pygame.time.get_ticks()
 
 # Initialisiere das Spiel
 pygame.init()
 screen = pygame.display.set_mode(size, 0, 32)
-pygame.display.set_caption("Pong mit Schläger mit Loch")
+pygame.display.set_caption("Pong mit Korb")
 reset_game()
 
 # Hauptspiel-Schleife
@@ -177,6 +171,9 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
         if event.type == pygame.KEYDOWN:
+            if game_over and event.key == pygame.K_RETURN:
+                # Spiel neu starten bei Game Over und Enter-Taste
+                reset_game()
             if event.key == pygame.K_ESCAPE:
                 paused_game = not paused_game
             if event.key == pygame.K_LEFT:
@@ -194,5 +191,4 @@ while True:
         draw_screen()
 
     if game_over:
-        reset_game()
-#Ende
+        draw_screen()
