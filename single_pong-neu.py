@@ -16,7 +16,7 @@ ball_durchmesser = ball_radius * 2
 ball_mitte_y = 150
 ball_mitte_x = (int((random.random() * 100000) % (groesse[0] - 200))) + 100
 ball_richtung = 'DOWN_LEFT'
-ball_geschwindigkeit = 5
+ball_geschwindigkeit = 3
 
 # Schläger-Einstellungen
 schlaeger_geschwindigkeit = 10
@@ -101,22 +101,26 @@ def draw_screen():
 
 # Hauptspiellogik
 def play():
-    global schlaeger_rand_links, zeit1, ball_richtung, ball_mitte_x, ball_mitte_y, punkte_stand, game_over, loch_breite, schlaeger_laenge
+    global schlaeger_rand_links, zeit1, ball_richtung, ball_mitte_x, ball_mitte_y, punkte_stand, game_over, loch_breite, schlaeger_laenge, ball_geschwindigkeit
 
-    if pygame.time.get_ticks() > (zeit1 + 11): 
+    # Berechne die neue Ballgeschwindigkeit basierend auf dem Punktestand
+    faktor = punkte_stand / 50.0 if punkte_stand <= 50.0 else 1.0
+    temp_ball_geschwindigkeit = ball_geschwindigkeit * (1 + faktor)
+
+    if pygame.time.get_ticks() > (zeit1 + 11):
         # Bewegung des Balls
         if ball_richtung == 'DOWN_LEFT':
-            ball_mitte_x -= ball_geschwindigkeit
-            ball_mitte_y += ball_geschwindigkeit
+            ball_mitte_x -= temp_ball_geschwindigkeit
+            ball_mitte_y += temp_ball_geschwindigkeit
         elif ball_richtung == 'DOWN_RIGHT':
-            ball_mitte_x += ball_geschwindigkeit
-            ball_mitte_y += ball_geschwindigkeit
+            ball_mitte_x += temp_ball_geschwindigkeit
+            ball_mitte_y += temp_ball_geschwindigkeit
         elif ball_richtung == 'UP_LEFT':
-            ball_mitte_x -= ball_geschwindigkeit
-            ball_mitte_y -= ball_geschwindigkeit
+            ball_mitte_x -= temp_ball_geschwindigkeit
+            ball_mitte_y -= temp_ball_geschwindigkeit
         elif ball_richtung == 'UP_RIGHT':
-            ball_mitte_x += ball_geschwindigkeit
-            ball_mitte_y -= ball_geschwindigkeit
+            ball_mitte_x += temp_ball_geschwindigkeit
+            ball_mitte_y -= temp_ball_geschwindigkeit
 
         # Wandkollisionen
         if ball_mitte_x - ball_radius <= 0:  #Wand links: Wenn die linke Kante des Balls (Mittelpunkt minus Radius) die Wand trifft (x<=0)
