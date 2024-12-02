@@ -104,11 +104,11 @@ def play():
     global schlaeger_rand_links, zeit1, ball_richtung, ball_mitte_x, ball_mitte_y, punkte_stand, game_over, loch_breite, schlaeger_laenge, ball_geschwindigkeit
 
     # Berechne die neue Ballgeschwindigkeit basierend auf dem Punktestand
-    faktor = punkte_stand / 50.0 if punkte_stand <= 50.0 else 1.0
+    faktor = punkte_stand / 60.0 if punkte_stand <= 60.0 else 1.0
     temp_ball_geschwindigkeit = ball_geschwindigkeit * (1 + faktor)
 
     if pygame.time.get_ticks() > (zeit1 + 11):
-        # Bewegung des Balls
+        # Bewegung des Balls gemäss Punktestand
         if ball_richtung == 'DOWN_LEFT':
             ball_mitte_x -= temp_ball_geschwindigkeit
             ball_mitte_y += temp_ball_geschwindigkeit
