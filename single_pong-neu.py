@@ -18,7 +18,7 @@ ball_mitte_x = random.randint(100, 900)
 ball_richtung = 'DOWN_LEFT'
 ball_geschwindigkeit = 3
 
-# Schläger-Einstellungen
+# Schlaeger-Einstellungen
 schlaeger_geschwindigkeit = 10
 schlaeger_laenge = 400
 schlaeger_hoehe = 25
