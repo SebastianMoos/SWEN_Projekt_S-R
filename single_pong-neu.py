@@ -14,7 +14,7 @@ groesse = [1000, 600]
 ball_radius = 25
 ball_durchmesser = ball_radius * 2
 ball_mitte_y = 150
-ball_mitte_x = (int((random.random() * 100000) % (groesse[0] - 200))) + 100
+ball_mitte_x = random.randint(100, 900)
 ball_richtung = 'DOWN_LEFT'
 ball_geschwindigkeit = 3
 
@@ -146,7 +146,7 @@ def play():
                         schlaeger_laenge -= ball_radius * 2  # reduziert Balkenbreite um zwei Ballradien (-= ist eine Kurzschreibweise in Python für: schläger_länge= schläger_länge - ball radius)
 
                     ball_mitte_y = 150  # Reset Ballhöhe (Wenn der Ball ins Loch fällt, wird der Ball neu positioniert --> Start Werte)
-                    ball_mitte_x = (int((random.random() * 100000) % (groesse[0] - 200))) + 100
+                    ball_mitte_x = random.randint(100, 900)
                     ball_richtung = random.choice(['DOWN_LEFT', 'DOWN_RIGHT'])
                 else:
                     # Ball prallt ab (Wenn der Ball den Schläger außerhalb der Lücke trifft, ändert sich seine Richtung, und er wird nach oben abgelenkt.)
