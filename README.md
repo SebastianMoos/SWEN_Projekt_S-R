@@ -4,7 +4,7 @@
 ### Was war die Aufgabe des Projekts? 
 Die Aufgabe des Projektes war ein Spiel zu erarbeiten um den Lernstoff im Fach SWEN anzuwenden.  
 Im Rahmen des Masterstudiums WInf wollten wir ein Spiel mit unseren Ideen optimieren.
-## Um was geht es in diesem Projekt?
+### Um was geht es in diesem Projekt?
 In diesem Projekt geht es um eine Variante des Spieles "Pong"   
 Wir haben das Spiel interaktiver, interessanter gestaltet. Deshalb nennen wir das Spiel "Poing".  
 
@@ -19,3 +19,23 @@ Pro gefangener Ball gibt es einen Punkt. Wenn der Punktestand 5 / 20 / 15 / 20 /
 dann wird das Loch im Schläger kleiner und das Spiel schwieriger. 
 Ebenfalls wird die Ballgeschwindigkeit abhängig vom Punktestand schneller. 
 Wenn der Spieler die Punktestand von 25 erreicht hat, dann wird zusätzlich der Schläger in Abhängigkeit der Punktzahl kürzer.
+
+### Mögliche Erweiterung des Spiels 
+Für das Spiel sind verschiedene Erweiterungen denkbar. Beispielsweise ein Mehrspieler-Modus, die Implementierung einer Highscore-Anzeige oder das Hinzufügen von Hindernissen. 
+
+## 2 Spielsteuerung 
+
+Das Spiel wird wie folgt gesteuert: 
+- Pfeiltaste links: Schläger nach links bewegen
+- Pfeiltaste rechts: Schläger nach rechts bewegen
+- ESC: Spiel pausieren
+- ENTER: Neustart nach Game Over 
+
+
+## 3 Technische Details und Files 
+
+Das Projekt besteht aus folgenden Files: 
+
+- README.md
+- single_pong-neu.py (Spiel Single Pong)
+- single_pong-neu_Backup261124.py (Backup File, welches den Stand vom 26.11.2024 enthält)
