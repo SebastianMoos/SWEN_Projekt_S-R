@@ -1,5 +1,7 @@
-# SWEN_Projekt_S-R
-## Was war die Aufgabe des Projekts? 
+# README für Projekt "Single Pong" 
+
+## 1 Beschreibung Projekt/Spiel 
+### Was war die Aufgabe des Projekts? 
 Die Aufgabe des Projektes war ein Spiel zu erarbeiten um den Lernstoff im Fach SWEN anzuwenden.  
 Im Rahmen des Masterstudiums WInf wollten wir ein Spiel mit unseren Ideen optimieren.
 ## Um was geht es in diesem Projekt?
