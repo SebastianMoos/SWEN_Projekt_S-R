@@ -31,7 +31,7 @@ min_loch_breite = ball_durchmesser  # Mindestgröße: gleich dem Durchmesser des
 loch_rand_links = schlaeger_rand_links + (schlaeger_laenge // 2) - (loch_breite // 2)
 loch_rand_rechts = loch_rand_links + loch_breite
 
-# Spielsteuerungsvariablen
+# Spielsteuerungsvariablen (initiale Variabeln quasi defalut Werte
 zeit1 = pygame.time.get_ticks()
 kann_links_bewegen = False
 kann_rechts_bewegen = False
