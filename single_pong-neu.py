@@ -198,4 +198,4 @@ while True: # Schleife läuft bis das Spiel beendet wird (z.B. durch sys.exit)
         draw_screen()
 
     if game_over:
-        draw_screen()
+        draw_screen() 
